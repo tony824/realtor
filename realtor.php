@@ -75,7 +75,7 @@ function orientation ($lat, $lng)
     $angle=0.0;
     $point = get_snapped_point($lat, $lng);
     $angle = getRotateAngle($lat, $lng, $point["latitude"], $point["longitude"]);
-    return (($angle >135) && ($angle<225));
+    return (($angle >105) && ($angle<255));
 }
 
 $result_arr=json_decode($result,true);
@@ -83,7 +83,9 @@ $result_arr=json_decode($result,true);
 if(!empty($result_arr)) {
 
     foreach ($result_arr["Results"] as $house){
-        if (address ($house["Property"]["Address"]["AddressText"]))
+        if ((address ($house["Property"]["Address"]["AddressText"]))
+            && orientation ((double)$house["Property"]["Address"]["Latitude"],
+                            (double)$house["Property"]["Address"]["Longitude"]))
         {
             array_push($house_arr,$house["MlsNumber"]);
         }            
@@ -106,7 +108,9 @@ if(!empty($result_arr)) {
         $ret = file_get_contents($url, false, $context);
         $ret_arr=json_decode($ret,true);
         foreach ($ret_arr["Results"] as $house){
-            if (address ($house["Property"]["Address"]["AddressText"]))
+            if ((address($house["Property"]["Address"]["AddressText"]))
+                && orientation ((double)$house["Property"]["Address"]["Latitude"],
+                                (double)$house["Property"]["Address"]["Longitude"]))
             {
                 array_push($house_arr,$house["MlsNumber"]);
             }            
