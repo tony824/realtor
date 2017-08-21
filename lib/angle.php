@@ -55,5 +55,5 @@ function getRotateAngle($lat1, $lng1, $lat2, $lng2)
 }
 
 
-var_dump(getRotateAngle(43.8006949,-79.4455814 ,43.800668646930951, -79.445804597379308));
+//var_dump(getRotateAngle(43.8006949,-79.4455814 ,43.800668646930951, -79.445804597379308));
 ?>

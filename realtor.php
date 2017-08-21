@@ -5,6 +5,9 @@ For example CRT,PL,CRES
 Generally,houses locate on these streets will be quiet and beautiful
 Run like this: php -f realor.php
 */
+define('__ROOT__', dirname(__FILE__));
+require_once(__ROOT__.'/lib/road.php');
+require_once(__ROOT__.'/lib/angle.php');
 
 $url = "https://api2.realtor.ca/Listing.svc/PropertySearch_Post";
 $params = array ("CultureId" => "1",
@@ -50,7 +53,8 @@ $result = file_get_contents($url, false, $context);
 
 $house_arr=array ();
 
-function my_house ($address)
+//filter by address name
+function address ($address)
 {
     $address_arr= array ("PL","CRT");
     $ret=false;
@@ -65,12 +69,21 @@ function my_house ($address)
     return $ret;
 }
 
+//filter by orientation
+function orientation ($lat, $lng)
+{
+    $angle=0.0;
+    $point = get_snapped_point($lat, $lng);
+    $angle = getRotateAngle($lat, $lng, $point["latitude"], $point["longitude"]);
+    return (($angle >135) && ($angle<225));
+}
+
 $result_arr=json_decode($result,true);
 
 if(!empty($result_arr)) {
 
     foreach ($result_arr["Results"] as $house){
-        if (my_house ($house["Property"]["Address"]["AddressText"]))
+        if (address ($house["Property"]["Address"]["AddressText"]))
         {
             array_push($house_arr,$house["MlsNumber"]);
         }            
@@ -93,7 +106,7 @@ if(!empty($result_arr)) {
         $ret = file_get_contents($url, false, $context);
         $ret_arr=json_decode($ret,true);
         foreach ($ret_arr["Results"] as $house){
-            if (my_house ($house["Property"]["Address"]["AddressText"]))
+            if (address ($house["Property"]["Address"]["AddressText"]))
             {
                 array_push($house_arr,$house["MlsNumber"]);
             }            
