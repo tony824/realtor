@@ -16,8 +16,8 @@ $params = array ("CultureId" => "1",
                  "RecordsPerPage" => "9",
                  "BuildingTypeId" => "1",
                  "ConstructionStyleId" => "3",
-                 "PriceMin" => "1100000",
-                 "PriceMax" => "2000000",
+                 "PriceMin" => "1200000",
+                 "PriceMax" => "1600000",
                  "MaximumResults" => "9",
                  "PropertySearchTypeId" => "1",
                  "TransactionTypeId" => "2",
@@ -28,15 +28,13 @@ $params = array ("CultureId" => "1",
                  "LongitudeMax" => "-79.23862601210936",
                  "LatitudeMin" => "43.702077668041646",
                  "LatitudeMax" =>"43.923312715190676",
-                 "SortOrder" => "A",
-                 "SortBy" => "1",
+                 "SortOrder" => "D",
+                 "SortBy" => "6",
                  "viewState" => "m",
                  "favouritelistingids" => "18347321",
                  "CurrentPage" => "1",
                  "ZoomLevel" => "12",
                  "PropertyTypeGroupID" => "1",
-                 "Token" => "D6TmfZprLI8jgvCHNOnL5Jd3MNEO4z/E9t ClDCeGdM=",
-                 "GUID" => "648f616c-8106-47df-86d7-456463b1f15f",
                  "Version" => "6.0" );
 $data = http_build_query ($params);
 $data_len = strlen ($data);
@@ -56,11 +54,18 @@ $house_arr=array ();
 //filter by address name
 function address ($address)
 {
-    $address_arr= array ("PL","CRT");
+    //return true;
+    //get ride of street name,focus on street type
+    $add_arr= explode ("|", $address);
+    $txt_array= explode ( " ",$add_arr[0]);
+    $dst_array= array_slice($txt_array, 2);
+    $address_str= implode (" " ,$dst_array);
+    
+    $address_arr= array ("PL","CRT","CRES","LANE","CIRC");
     $ret=false;
     
     foreach ($address_arr as $add){
-        if (strpos($address, $add))
+        if (strpos($address_str, $add))
         {
             $ret=true;
             break;
@@ -79,6 +84,8 @@ function orientation ($lat, $lng)
 }
 
 $result_arr=json_decode($result,true);
+//var_dump ($result_arr);
+//exit();
 
 if(!empty($result_arr)) {
 
