@@ -28,6 +28,11 @@ function getRotateAngle($lat1, $lng1, $lat2, $lng2)
  
     // normalize
     $dist1 = sqrt( $x1 * $x1 + $y1 * $y1 );
+    if (0.0 === $dist1)
+    {
+        echo ("Overlap points $lat1, $lng1, $lat2, $lng2");
+        return 0.0;
+    }
     $x1 /= $dist1;
     $y1 /= $dist1;
     $dist2 = sqrt( $x2 * $x2 + $y2 * $y2 );
