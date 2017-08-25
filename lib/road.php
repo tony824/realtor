@@ -15,7 +15,7 @@ function get_snapped_point ($lat, $lng)
     );
     
     //ATTENTION :Replace your own api_key
-    $api_key="xxxxxxx";
+    $api_key="key";
     $url_arr = array("https://roads.googleapis.com/v1/nearestRoads?points=$lat,$lng&key=".$api_key,
                      "https://roads.googleapis.com/v1/snapToRoads?path=$lat,$lng&key=".$api_key);
 
